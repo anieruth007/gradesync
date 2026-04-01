@@ -1,0 +1,9 @@
+# Cloud Computing Fundamentals
+Cloud computing is the delivery of computing services—including servers, storage, databases, networking, software, analytics, and intelligence—over the Internet (“the cloud”) to offer faster innovation, flexible resources, and economies of scale.
+
+## Key Concepts
+1. **Scalability**: The ability to increase or decrease resources based on demand.
+2. **Elasticity**: The ability to automatically scale resources in real-time.
+3. **PaaS (Platform as a Service)**: A cloud computing model where a third-party provider delivers hardware and software tools to users over the internet.
+4. **IaaS (Infrastructure as a Service)**: High-level APIs used to dereference various low-level details of underlying network infrastructure.
+5. **SaaS (Software as a Service)**: Software that is deployed over the internet and is centrally hosted.
