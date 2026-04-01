@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import DashboardLayout from '../components/DashboardLayout';
 import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
-import { 
-  FileText, 
-  ChevronLeft, 
-  ChevronRight, 
-  CheckCircle2, 
+import toast from 'react-hot-toast';
+import {
+  FileText,
+  ChevronLeft,
+  ChevronRight,
+  CheckCircle2,
   X,
   Trophy,
   BrainCircuit,
@@ -101,7 +102,8 @@ const MockTests = () => {
         isCorrect
       });
     } catch (err) {
-      console.error(err);
+      console.error('Failed to record attempt:', err);
+      toast.error('Progress not saved — check your connection');
     }
 
     if (currentQuestion < selectedMaterial.quiz.length - 1) {

@@ -10,8 +10,10 @@ import MockTests from './pages/MockTests';
 import TeacherInsights from './pages/TeacherInsights';
 import Courses from './pages/Courses';
 import Settings from './pages/Settings';
+import Progress from './pages/Progress';
 import DashboardLayout from './components/DashboardLayout';
 import './index.css';
+import toast from 'react-hot-toast';
 import { BookOpen, Layers, FileText, Megaphone, MessageCircle, Trash2, Send, CheckCircle2, X, ChevronDown, ChevronUp } from 'lucide-react';
 
 // Protected Route Component
@@ -86,7 +88,8 @@ const Dashboard = () => {
       setAnnData({ title: '', content: '' });
       setShowAnnForm(false);
       fetchAnnouncements();
-    } catch (err) { console.error(err); }
+      toast.success('Announcement posted!');
+    } catch (err) { console.error(err); toast.error('Failed to post announcement.'); }
   };
 
   const handleDeleteAnnouncement = async (id) => {
@@ -94,6 +97,7 @@ const Dashboard = () => {
     try {
       await axios.delete(`/api/announcements/${id}`);
       fetchAnnouncements();
+      toast.success('Announcement deleted.');
     } catch (err) { console.error(err); }
   };
 
@@ -107,6 +111,7 @@ const Dashboard = () => {
       setQueryData({ teacherId: '', subject: '', message: '' });
       setShowQueryForm(false);
       fetchQueries();
+      toast.success('Query sent to your teacher!');
     } catch (err) {
       console.error('Query error:', err.response?.status, err.response?.data);
       setQueryError(err.response?.data?.msg || err.message || `Error ${err.response?.status}: Failed to send query.`);
@@ -119,7 +124,8 @@ const Dashboard = () => {
       await axios.post(`/api/queries/${queryId}/reply`, { message: replyText });
       setReplyText('');
       fetchQueries();
-    } catch (err) { console.error(err); }
+      toast.success('Reply sent!');
+    } catch (err) { console.error(err); toast.error('Failed to send reply.'); }
   };
 
   const handleResolve = async (queryId) => {
@@ -546,6 +552,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <Courses />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/progress"
+            element={
+              <ProtectedRoute>
+                <Progress />
               </ProtectedRoute>
             }
           />

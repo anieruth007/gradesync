@@ -3,6 +3,7 @@ const multer = require('multer');
 const pdfModule = require('pdf-parse');
 const pdf = pdfModule.default || pdfModule;
 const path = require('path');
+const mammoth = require('mammoth');
 const Material = require('../models/Material');
 const {
   generateSummary,
@@ -42,8 +43,14 @@ router.post('/upload', auth, upload.single('file'), async (req, res) => {
       extractedText = fileBuffer.toString('utf8');
       console.log('[UPLOAD] Read text file, length:', extractedText.length);
 
+    } else if (fileExt === '.docx') {
+      console.log('[UPLOAD] Parsing DOCX from memory buffer');
+      const result = await mammoth.extractRawText({ buffer: fileBuffer });
+      extractedText = result.value;
+      console.log('[UPLOAD] Extracted DOCX text length:', extractedText.length);
+
     } else {
-      return res.status(400).json({ msg: 'Only PDF or TXT files are supported' });
+      return res.status(400).json({ msg: 'Only PDF, DOCX, or TXT files are supported' });
     }
 
     if (!extractedText || extractedText.trim().length < 20) {

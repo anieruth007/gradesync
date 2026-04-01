@@ -127,9 +127,18 @@ const Materials = () => {
         </div>
       )}
 
-      {loading && <div className="loading-state">Processing your materials...</div>}
+      {loading && (
+        <div className="skeleton-list">
+          {[1,2,3,4].map(i => (
+            <div key={i} className="skeleton-card">
+              <div className="sk-icon" />
+              <div className="sk-lines"><div className="sk-line" /><div className="sk-line short" /></div>
+            </div>
+          ))}
+        </div>
+      )}
 
-      <div className="materials-grid">
+      {!loading && <div className="materials-grid">
         {filteredMaterials.length > 0 ? filteredMaterials.map((material) => (
           <div key={material._id} className="material-card card clickable" onClick={() => setSelectedMaterial(material)}>
             <div className="material-icon">
@@ -162,7 +171,7 @@ const Materials = () => {
             )}
           </div>
         )}
-      </div>
+      </div>}
 
       {/* Upload Modal */}
       {showUpload && (
@@ -185,7 +194,7 @@ const Materials = () => {
                 />
               </div>
               <div className="form-group">
-                <label className="form-label">Choose File (PDF or Text)</label>
+                <label className="form-label">Choose File (PDF, DOCX, or TXT)</label>
                 <div className="file-dropzone">
                   <Upload size={32} />
                   <input 
@@ -346,7 +355,7 @@ const Materials = () => {
         .modal-content {
           width: 100%;
           max-width: 500px;
-          background: white;
+          background: var(--bg-card);
           padding: 32px;
           border-radius: var(--radius-lg);
           position: relative;
@@ -418,12 +427,25 @@ const Materials = () => {
           border-radius: var(--radius-md);
           font-weight: 500;
         }
-        .loading-state {
-          padding: 40px;
-          text-align: center;
-          font-weight: 600;
-          color: var(--primary);
+        .skeleton-list { display: flex; flex-direction: column; gap: 12px; }
+        .skeleton-card {
+          display: flex; align-items: center; gap: 16px;
+          padding: 20px; border-radius: var(--radius-lg);
+          background: var(--bg-card); border: 1px solid var(--border);
         }
+        .sk-icon {
+          width: 48px; height: 48px; border-radius: 12px; flex-shrink: 0;
+          background: linear-gradient(90deg,var(--bg-main) 25%,var(--border) 50%,var(--bg-main) 75%);
+          background-size: 200% 100%; animation: shimmer 1.4s infinite;
+        }
+        .sk-lines { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+        .sk-line {
+          height: 13px; border-radius: 6px;
+          background: linear-gradient(90deg,var(--bg-main) 25%,var(--border) 50%,var(--bg-main) 75%);
+          background-size: 200% 100%; animation: shimmer 1.4s infinite;
+        }
+        .sk-line.short { width: 45%; }
+        @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
         .btn-full {
           width: 100%;
           margin-top: 10px;

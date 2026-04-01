@@ -198,7 +198,7 @@ const Courses = () => {
           align-items: center; justify-content: center; z-index: 1000; padding: 20px;
         }
         .modal-box {
-          background: white; border-radius: var(--radius-lg);
+          background: var(--bg-card); border-radius: var(--radius-lg);
           padding: 32px; width: 100%; max-width: 420px;
           box-shadow: var(--shadow-lg);
         }

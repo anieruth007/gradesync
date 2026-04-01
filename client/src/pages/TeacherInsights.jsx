@@ -154,7 +154,7 @@ const TeacherInsights = () => {
         
         .global-stats { display: flex; gap: 16px; margin-bottom: 40px; }
         .stat-pill {
-           background: white;
+           background: var(--bg-card);
            padding: 10px 20px;
            border-radius: 30px;
            display: flex;

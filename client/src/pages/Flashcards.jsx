@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react';
 import DashboardLayout from '../components/DashboardLayout';
 import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
-import { 
-  Layers, 
-  ChevronLeft, 
-  ChevronRight, 
-  RotateCcw, 
-  CheckCircle2, 
+import toast from 'react-hot-toast';
+import {
+  Layers,
+  ChevronLeft,
+  ChevronRight,
+  RotateCcw,
+  CheckCircle2,
   XCircle,
   Sparkles
 } from 'lucide-react';
@@ -71,14 +72,17 @@ const Flashcards = () => {
       type: 'flashcard',
       concept: card.concept || card.front,
       isCorrect
-    }).catch(err => console.error(err));
+    }).catch(err => {
+      console.error('Failed to record attempt:', err);
+      toast.error('Progress not saved — check your connection');
+    });
 
     // Always navigate regardless of API result
     if (currentIndex < selectedMaterial.flashcards.length - 1) {
       setIsFlipped(false);
       setTimeout(() => setCurrentIndex(currentIndex + 1), 300);
     } else {
-      alert('Flashcard set completed!');
+      toast.success('Flashcard set completed! Great work! 🎉');
       setSelectedMaterial(null);
       setCurrentIndex(0);
       setIsFlipped(false);
@@ -289,7 +293,7 @@ const Flashcards = () => {
           border: 1px solid var(--border);
           transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
           text-align: center;
-          background: white;
+          background: var(--bg-card);
         }
         .card-label {
           position: absolute;

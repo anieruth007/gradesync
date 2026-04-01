@@ -1,6 +1,7 @@
 const express = require('express');
 const Performance = require('../models/Performance');
 const Material = require('../models/Material');
+const User = require('../models/User');
 const { generateTeacherInsights } = require('../utils/ai');
 const auth = require('../middleware/auth');
 
@@ -40,17 +41,17 @@ router.get('/stats/all', auth, async (req, res) => {
     }
 
     const materialCount = await Material.countDocuments({ teacher: req.user.id });
-    
-    // Get distinct students who have interacted with this teacher's materials
+
+    const teacher = await User.findById(req.user.id).select('enrolledTeachers');
+    const enrolledStudentCount = teacher.enrolledTeachers.length;
+
     const materials = await Material.find({ teacher: req.user.id }).select('_id');
     const materialIds = materials.map(m => m._id);
-    
-    const distinctStudents = await Performance.distinct('student', { materialId: { $in: materialIds } });
     const totalAttempts = await Performance.countDocuments({ materialId: { $in: materialIds } });
 
     res.json({
       materialCount,
-      studentCount: distinctStudents.length,
+      studentCount: enrolledStudentCount,
       totalAttempts
     });
   } catch (err) {

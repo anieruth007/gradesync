@@ -11,11 +11,13 @@ import {
   GraduationCap,
   Settings,
   Moon,
-  Sun
+  Sun,
+  BarChart2,
+  X,
 } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 
-const Sidebar = () => {
+const Sidebar = ({ isOpen, onClose }) => {
   const { user, logout } = useAuth();
   const { theme, toggleTheme } = useTheme();
 
@@ -33,6 +35,10 @@ const Sidebar = () => {
     { name: 'Mock Tests', icon: <FileText size={20} />, path: '/tests' },
   );
 
+  if (user?.role === 'student') {
+    navItems.push({ name: 'My Progress', icon: <BarChart2 size={20} />, path: '/progress' });
+  }
+
   if (user?.role === 'teacher') {
     navItems.push({ name: 'Teacher Insights', icon: <TrendingUp size={20} />, path: '/insights' });
   }
@@ -40,18 +46,22 @@ const Sidebar = () => {
   navItems.push({ name: 'Settings', icon: <Settings size={20} />, path: '/settings' });
 
   return (
-    <aside className="sidebar glass">
+    <aside className={`sidebar glass ${isOpen ? 'mobile-open' : ''}`}>
       <div className="sidebar-header">
         <GraduationCap size={32} color="#6366f1" />
         <span>GradeSync</span>
+        <button className="sidebar-close-btn" onClick={onClose}>
+          <X size={20} />
+        </button>
       </div>
 
       <nav className="sidebar-nav">
         {navItems.map((item) => (
-          <NavLink 
-            key={item.name} 
-            to={item.path} 
+          <NavLink
+            key={item.name}
+            to={item.path}
             className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
+            onClick={onClose}
           >
             {item.icon}
             <span>{item.name}</span>
@@ -92,6 +102,7 @@ const Sidebar = () => {
           padding: 24px;
           border-right: 1px solid var(--border);
           z-index: 100;
+          transition: transform 0.25s ease;
         }
         .sidebar-header {
           display: flex;
@@ -102,11 +113,21 @@ const Sidebar = () => {
           font-size: 20px;
           margin-bottom: 48px;
         }
+        .sidebar-close-btn {
+          display: none;
+          margin-left: auto;
+          background: transparent;
+          color: var(--text-muted);
+          padding: 4px;
+          border-radius: 6px;
+        }
+        .sidebar-close-btn:hover { background: var(--bg-main); }
         .sidebar-nav {
           flex: 1;
           display: flex;
           flex-direction: column;
           gap: 8px;
+          overflow-y: auto;
         }
         .nav-item {
           display: flex;
@@ -118,14 +139,8 @@ const Sidebar = () => {
           font-weight: 500;
           transition: var(--transition);
         }
-        .nav-item:hover {
-          background: var(--primary-light);
-          color: var(--primary);
-        }
-        .nav-item.active {
-          background: var(--primary);
-          color: var(--text-white);
-        }
+        .nav-item:hover { background: var(--primary-light); color: var(--primary); }
+        .nav-item.active { background: var(--primary); color: var(--text-white); }
         .sidebar-footer {
           margin-top: auto;
           padding-top: 24px;
@@ -138,60 +153,33 @@ const Sidebar = () => {
           margin-bottom: 16px;
         }
         .avatar {
-          width: 40px;
-          height: 40px;
-          background: var(--primary);
-          color: white;
-          border-radius: 10px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-weight: 700;
+          width: 40px; height: 40px;
+          background: var(--primary); color: white;
+          border-radius: 10px; display: flex;
+          align-items: center; justify-content: center;
+          font-weight: 700; flex-shrink: 0;
         }
-        .user-name {
-          font-weight: 600;
-          font-size: 14px;
-          color: var(--text-main);
-        }
-        .user-role {
-          font-size: 12px;
-          color: var(--text-muted);
-          text-transform: capitalize;
-        }
-        .sidebar-actions {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-        }
+        .user-name { font-weight: 600; font-size: 14px; color: var(--text-main); }
+        .user-role { font-size: 12px; color: var(--text-muted); text-transform: capitalize; }
+        .sidebar-actions { display: flex; align-items: center; gap: 8px; }
         .theme-btn {
-          flex: 1;
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          padding: 10px 12px;
-          border-radius: var(--radius-md);
-          color: var(--text-muted);
-          background: var(--primary-light);
-          font-weight: 600;
-          font-size: 13px;
-          transition: var(--transition);
+          flex: 1; display: flex; align-items: center; gap: 8px;
+          padding: 10px 12px; border-radius: var(--radius-md);
+          color: var(--text-muted); background: var(--primary-light);
+          font-weight: 600; font-size: 13px; transition: var(--transition);
         }
-        .theme-btn:hover {
-          color: var(--primary);
-          background: var(--primary-light);
-        }
+        .theme-btn:hover { color: var(--primary); }
         .logout-btn {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding: 10px;
-          border-radius: var(--radius-md);
-          color: var(--error);
-          background: transparent;
-          font-weight: 600;
+          display: flex; align-items: center; justify-content: center;
+          padding: 10px; border-radius: var(--radius-md);
+          color: var(--error); background: transparent;
         }
-        .logout-btn:hover {
-          background: rgba(239, 68, 68, 0.1);
+        .logout-btn:hover { background: rgba(239,68,68,0.1); }
+
+        @media (max-width: 768px) {
+          .sidebar { transform: translateX(-100%); }
+          .sidebar.mobile-open { transform: translateX(0); }
+          .sidebar-close-btn { display: flex; }
         }
       `}</style>
     </aside>
