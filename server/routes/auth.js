@@ -8,6 +8,11 @@ const router = express.Router();
 // Register
 router.post('/register', async (req, res) => {
   const { name, email, password, role, subject } = req.body;
+
+  if (!password || password.length < 6) {
+    return res.status(400).json({ msg: 'Password must be at least 6 characters.' });
+  }
+
   try {
     let user = await User.findOne({ email });
     if (user) {
@@ -27,29 +32,15 @@ router.post('/register', async (req, res) => {
       enrollmentKey,
     });
 
-    // Hash password
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(password, salt);
-
     await user.save();
 
-    // Create and return token
-    const payload = {
-      user: {
-        id: user.id,
-        role: user.role,
-      },
-    };
-
-    jwt.sign(
-      payload,
-      process.env.JWT_SECRET,
-      { expiresIn: '7d' },
-      (err, token) => {
-        if (err) throw err;
-        res.json({ token, user: { id: user.id, name: user.name, email: user.email, role: user.role, subject: user.subject, enrollmentKey: user.enrollmentKey, enrolledTeachers: user.enrolledTeachers } });
-      }
-    );
+    const payload = { user: { id: user.id, role: user.role } };
+    jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '7d' }, (err, token) => {
+      if (err) throw err;
+      res.json({ token, user: { id: user.id, name: user.name, email: user.email, role: user.role, subject: user.subject, enrollmentKey: user.enrollmentKey, enrolledTeachers: user.enrolledTeachers } });
+    });
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server error');
@@ -70,23 +61,11 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ msg: 'Invalid credentials' });
     }
 
-    // Create and return token
-    const payload = {
-      user: {
-        id: user.id,
-        role: user.role,
-      },
-    };
-
-    jwt.sign(
-      payload,
-      process.env.JWT_SECRET,
-      { expiresIn: '7d' },
-      (err, token) => {
-        if (err) throw err;
-        res.json({ token, user: { id: user.id, name: user.name, email: user.email, role: user.role, subject: user.subject, enrollmentKey: user.enrollmentKey, enrolledTeachers: user.enrolledTeachers } });
-      }
-    );
+    const payload = { user: { id: user.id, role: user.role } };
+    jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '7d' }, (err, token) => {
+      if (err) throw err;
+      res.json({ token, user: { id: user.id, name: user.name, email: user.email, role: user.role, subject: user.subject, enrollmentKey: user.enrollmentKey, enrolledTeachers: user.enrolledTeachers } });
+    });
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server error');
