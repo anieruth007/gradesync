@@ -176,7 +176,7 @@ const Materials = () => {
       {/* Upload Modal */}
       {showUpload && (
         <div className="modal-overlay">
-          <div className="modal-content glass animate-fade-in">
+          <div className="modal-content animate-fade-in">
             <div className="modal-header">
               <h2>Upload Material</h2>
               <button onClick={() => setShowUpload(false)} className="close-btn"><X /></button>
@@ -216,7 +216,7 @@ const Materials = () => {
       {/* Material Detail Modal */}
       {selectedMaterial && (
         <div className="modal-overlay">
-          <div className="modal-content glass wide animate-fade-in">
+          <div className="modal-content wide animate-fade-in">
             <div className="modal-header">
               <div className="header-title">
                 <Sparkles size={24} color="#8b5cf6" />
@@ -358,6 +358,8 @@ const Materials = () => {
           background: var(--bg-card);
           padding: 32px;
           border-radius: var(--radius-lg);
+          border: 1px solid var(--border);
+          box-shadow: var(--shadow-lg);
           position: relative;
         }
         .modal-content.wide {
