@@ -355,7 +355,8 @@ const Materials = () => {
         .modal-content {
           width: 100%;
           max-width: 500px;
-          background: var(--bg-card);
+          background: var(--bg-card) !important;
+          color: var(--text-main);
           padding: 32px;
           border-radius: var(--radius-lg);
           border: 1px solid var(--border);
@@ -428,6 +429,7 @@ const Materials = () => {
           border: 1px solid rgba(16,185,129,0.25);
           border-radius: var(--radius-md);
           font-weight: 500;
+          color: var(--text-main);
         }
         .skeleton-list { display: flex; flex-direction: column; gap: 12px; }
         .skeleton-card {
