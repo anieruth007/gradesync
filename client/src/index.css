@@ -263,3 +263,16 @@ button {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.6; }
 }
+
+/* ── Modal dark mode fix (global override) ── */
+.modal-content {
+  background: var(--bg-card) !important;
+  color: var(--text-main) !important;
+}
+.modal-content h2,
+.modal-content h3 {
+  color: var(--text-main) !important;
+}
+.note-item {
+  color: var(--text-main);
+}
