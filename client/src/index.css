@@ -269,10 +269,14 @@ button {
   background: var(--bg-card) !important;
   color: var(--text-main) !important;
 }
-.modal-content h2,
-.modal-content h3 {
-  color: var(--text-main) !important;
+[data-theme="dark"] .modal-content {
+  background: #1e293b !important;
+  color: #f1f5f9 !important;
 }
-.note-item {
-  color: var(--text-main);
+[data-theme="dark"] .modal-content h2,
+[data-theme="dark"] .modal-content h3 {
+  color: #f1f5f9 !important;
+}
+[data-theme="dark"] .note-item {
+  color: #f1f5f9 !important;
 }
